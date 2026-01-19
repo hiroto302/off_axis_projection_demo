@@ -206,22 +206,22 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
 ## Phase 5: デバッグ UI の実装
 
 ### 5.1 lil-gui セットアップ
-- [ ] lil-gui インスタンス作成
-- [ ] GUI パネルの右上配置
-- [ ] 折りたたみ可能に設定
+- [x] lil-gui インスタンス作成
+- [x] GUI パネルの右上配置
+- [x] 折りたたみ可能に設定
 
 ### 5.2 パラメータコントロール追加
-- [ ] Smoothing スライダー（0.01 - 0.5、デフォルト: 0.1）
-- [ ] Scale スライダー（0.5 - 5.0、デフォルト: 2.0）
-- [ ] Viewing Distance スライダー（30 - 100cm、デフォルト: 60）
-- [ ] Screen Width スライダー（20 - 50cm、デフォルト: 33.8）
+- [x] Smoothing スライダー（0.01 - 0.5、デフォルト: 0.1）
+- [x] Scale スライダー（0.5 - 5.0、デフォルト: 2.0）
+- [x] Viewing Distance スライダー（30 - 100cm、デフォルト: 60）
+- [x] Screen Width スライダー（20 - 50cm、デフォルト: 33.8）
 
 ### 5.3 デバッグ機能
-- [ ] Show Video チェックボックス
+- [x] Show Video チェックボックス
   - ON: ビデオ要素を右下に表示
   - OFF: ビデオ要素を非表示
 
-- [ ] Show Stats チェックボックス
+- [x] Show Stats チェックボックス
   - ON: FPS カウンター表示（stats.js または自作）
   - OFF: 非表示
 

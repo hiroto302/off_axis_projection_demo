@@ -1,4 +1,5 @@
 import './style.css'
+import { GUI } from 'lil-gui'
 import { FaceDetectorManager } from './modules/faceDetector.js'
 import { ThreeSceneManager } from './modules/threeScene.js'
 import { CameraController } from './modules/cameraController.js'
@@ -34,6 +35,22 @@ class OffAxisProjectionApp {
 
     // Scale for head movement amplification
     this.scale = 2.0
+
+    // GUI parameters
+    this.guiParams = {
+      smoothing: 0.1,
+      scale: 2.0,
+      viewingDistance: 60,
+      screenWidth: 33.8,
+      showVideo: false,
+      showStats: false,
+      manualControl: false,
+      cameraX: 0,
+      cameraY: 0
+    }
+
+    // GUI instance
+    this.gui = null
   }
 
   /**
@@ -125,6 +142,114 @@ class OffAxisProjectionApp {
   }
 
   /**
+   * Initialize lil-gui debug interface
+   */
+  initGUI() {
+    try {
+      console.log('Initializing GUI...')
+
+      this.gui = new GUI()
+      this.gui.title('Debug Controls')
+
+      // Parameter controls folder
+      const paramsFolder = this.gui.addFolder('Parameters')
+
+      paramsFolder
+        .add(this.guiParams, 'smoothing', 0.01, 0.5, 0.01)
+        .name('Smoothing')
+        .onChange((value) => {
+          this.smoothingAlpha = value
+        })
+
+      paramsFolder
+        .add(this.guiParams, 'scale', 0.5, 5.0, 0.1)
+        .name('Scale')
+        .onChange((value) => {
+          this.scale = value
+        })
+
+      paramsFolder
+        .add(this.guiParams, 'viewingDistance', 30, 100, 1)
+        .name('Viewing Distance (cm)')
+        .onChange((value) => {
+          if (this.cameraController) {
+            this.cameraController.viewingDistance = value
+          }
+        })
+
+      paramsFolder
+        .add(this.guiParams, 'screenWidth', 20, 50, 0.1)
+        .name('Screen Width (cm)')
+        .onChange((value) => {
+          if (this.cameraController) {
+            this.cameraController.screenWidth = value
+          }
+        })
+
+      paramsFolder.open()
+
+      // Debug features folder
+      const debugFolder = this.gui.addFolder('Debug')
+
+      debugFolder
+        .add(this.guiParams, 'showVideo')
+        .name('Show Video')
+        .onChange((value) => {
+          if (this.webcam) {
+            if (value) {
+              this.webcam.classList.add('visible')
+              this.webcam.style.zIndex = '200'
+            } else {
+              this.webcam.classList.remove('visible')
+              this.webcam.style.zIndex = '-1'
+            }
+          }
+        })
+
+      debugFolder
+        .add(this.guiParams, 'showStats')
+        .name('Show Stats')
+        .onChange((value) => {
+          // Stats.js integration would go here
+          console.log('Show Stats:', value)
+        })
+
+      debugFolder.close()
+
+      // Camera Position folder for manual control
+      const cameraFolder = this.gui.addFolder('Camera Position')
+
+      cameraFolder
+        .add(this.guiParams, 'manualControl')
+        .name('Manual Control')
+        .onChange((value) => {
+          if (value) {
+            // Reset camera position when entering manual mode
+            this.guiParams.cameraX = 0
+            this.guiParams.cameraY = 0
+          }
+        })
+
+      cameraFolder
+        .add(this.guiParams, 'cameraX', -20, 20, 0.1)
+        .name('Camera X (cm)')
+        .listen() // Update display when value changes programmatically
+
+      cameraFolder
+        .add(this.guiParams, 'cameraY', -15, 15, 0.1)
+        .name('Camera Y (cm)')
+        .listen() // Update display when value changes programmatically
+
+      cameraFolder.close()
+
+      console.log('GUI initialized successfully')
+    } catch (error) {
+      console.error('GUI initialization error:', error)
+      // Non-critical error, don't throw
+    }
+  }
+
+  /**
    * Main animation loop
    */
   animate() {
@@ -164,6 +289,22 @@ class OffAxisProjectionApp {
     if (!this.faceDetector || !this.webcam) return
 
     try {
+      // Manual control mode - skip face detection
+      if (this.guiParams.manualControl) {
+        // Apply smoothing to manual camera position
+        const smoothed = this.smoother.update(
+          { x: this.guiParams.cameraX, y: this.guiParams.cameraY, z: this.cameraController.viewingDistance },
+          { x: this.smoothingAlpha, y: this.smoothingAlpha, z: 0.15 }
+        )
+
+        // Update camera projection with manual position
+        this.cameraController.updateProjection(smoothed.x, smoothed.y, smoothed.z)
+
+        // Hide no-face warning in manual mode
+        this.hideNoFaceWarning()
+        return
+      }
+
       // Detect face in current video frame
       const detection = this.faceDetector.detectFace(this.webcam, timestamp)
 
@@ -286,11 +427,14 @@ class OffAxisProjectionApp {
       this.showLoading('3Dシーンを構築中...')
       this.initThreeScene()
 
-      // Step 5: Hide loading screen
+      // Step 5: Initialize GUI
+      this.initGUI()
+
+      // Step 6: Hide loading screen
       this.hideLoading()
       this.hideNoFaceWarning()
 
-      // Step 6: Start animation loop
+      // Step 7: Start animation loop
       this.isRunning = true
       this.lastTime = performance.now()
       this.animate()
@@ -308,6 +452,10 @@ class OffAxisProjectionApp {
    */
   dispose() {
     this.isRunning = false
+
+    if (this.gui) {
+      this.gui.destroy()
+    }
 
     if (this.faceDetector) {
       this.faceDetector.dispose()
