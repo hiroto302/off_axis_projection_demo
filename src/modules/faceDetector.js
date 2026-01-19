@@ -69,18 +69,22 @@ export class FaceDetectorManager {
         return null;
       }
 
-      // Extract bounding box
+      // Extract bounding box (in pixel coordinates)
       const bbox = detection.boundingBox;
 
-      // Calculate face center (normalized coordinates [0, 1])
-      const faceX = bbox.originX + bbox.width / 2;
-      const faceY = bbox.originY + bbox.height / 2;
+      // Calculate face center in pixel coordinates
+      const faceCenterX = bbox.originX + bbox.width / 2;
+      const faceCenterY = bbox.originY + bbox.height / 2;
+
+      // Normalize to [0, 1] using video dimensions
+      const normalizedX = faceCenterX / videoElement.videoWidth;
+      const normalizedY = faceCenterY / videoElement.videoHeight;
 
       return {
-        x: faceX,
-        y: faceY,
-        width: bbox.width,
-        height: bbox.height,
+        x: normalizedX,
+        y: normalizedY,
+        width: bbox.width / videoElement.videoWidth,
+        height: bbox.height / videoElement.videoHeight,
         confidence: detection.categories[0].score
       };
     } catch (error) {
