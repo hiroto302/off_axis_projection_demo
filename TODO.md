@@ -278,21 +278,21 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
 ## Phase 8: デプロイ準備
 
 ### 8.1 ビルド設定の確認
-- [ ] `npm run build` が正常に動作するか確認
-- [ ] `dist/` ディレクトリが正しく生成されるか確認
-- [ ] アセットパスが正しく解決されるか確認
+- [x] `npm run build` が正常に動作するか確認
+- [x] `dist/` ディレクトリが正しく生成されるか確認
+- [x] アセットパスが正しく解決されるか確認
 
 ### 8.2 GitHub Pages デプロイ
-- [ ] GitHub リポジトリに変更をプッシュ
-- [ ] GitHub Pages を有効化（Settings → Pages）
-- [ ] ソースを `gh-pages` ブランチまたは `main` の `/dist` に設定
-- [ ] デプロイ後、HTTPS で動作確認（カメラアクセス必須）
+- [x] GitHub リポジトリに変更をプッシュ
+- [x] GitHub Pages を有効化（Settings → Pages）
+- [x] ソースを `gh-pages` ブランチまたは `main` の `/dist` に設定
+- [x] デプロイ後、HTTPS で動作確認（カメラアクセス必須）
 
 ### 8.3 デプロイ後の動作確認
-- [ ] GitHub Pages URL でアクセス
-- [ ] カメラアクセスが正常に動作するか
-- [ ] 顔検出とoff-axis projection が正常に動作するか
-- [ ] 各種エラーハンドリングが機能するか
+- [x] GitHub Pages URL でアクセス
+- [x] カメラアクセスが正常に動作するか
+- [x] 顔検出とoff-axis projection が正常に動作するか
+- [x] 各種エラーハンドリングが機能するか
 
 ---
 
