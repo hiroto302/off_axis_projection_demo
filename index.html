@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/off_axis_projection_demo/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Off-Axis Projection Demo - Three.js & MediaPipe</title>
+    <script type="module" crossorigin src="/off_axis_projection_demo/assets/index-DilYDq2E.js"></script>
+    <link rel="stylesheet" crossorigin href="/off_axis_projection_demo/assets/index-DOOqrBKA.css">
+  </head>
+  <body>
+    <!-- Main rendering container -->
+    <div id="app"></div>
+
+    <!-- Hidden video element for webcam -->
+    <video id="webcam" autoplay playsinline></video>
+
+    <!-- Loading screen -->
+    <div id="loading">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <p>MediaPipeモデル読み込み中...</p>
+      </div>
+    </div>
+
+    <!-- No face detected warning -->
+    <div id="no-face-warning" class="hidden">
+      カメラに顔を向けてください
+    </div>
+
+  </body>
+</html>
