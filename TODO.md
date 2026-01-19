@@ -56,7 +56,7 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
 ## Phase 3: コアロジックの実装
 
 ### 3.1 スムージングモジュール (`smoothing.js`)
-- [ ] EMA アルゴリズムの実装
+- [x] EMA アルゴリズムの実装
   ```javascript
   class Smoother {
     constructor(initialValue = 0) {
@@ -71,58 +71,58 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
     }
   }
   ```
-- [ ] X, Y, Z 軸用の Smoother インスタンスを管理するクラスを実装
+- [x] X, Y, Z 軸用の Smoother インスタンスを管理するクラスを実装
 
 ### 3.2 顔検出モジュール (`faceDetector.js`)
-- [ ] MediaPipe Face Detection の初期化関数
+- [x] MediaPipe Face Detection の初期化関数
   - CDN から WASM モデルを読み込み
   - `FaceDetector.createFromOptions()` で VIDEO モード設定
   - `minDetectionConfidence: 0.5`
   - `minTrackingConfidence: 0.5`
 
-- [ ] 顔検出実行関数
+- [x] 顔検出実行関数
   - ビデオフレームを受け取り、検出結果を返す
   - 複数顔検出時は `detections[0]` のみ使用
   - 信頼度 < 0.5 の場合は null を返す
 
-- [ ] エラーハンドリング
+- [x] エラーハンドリング
   - モデル読み込み失敗時のエラーメッセージ表示
 
 ### 3.3 Three.js シーンモジュール (`threeScene.js`)
-- [ ] シーン初期化
+- [x] シーン初期化
   - `new THREE.Scene()` 作成
   - 背景色設定（黒または濃いグレー）
 
-- [ ] グリッド作成
+- [x] グリッド作成
   - `new THREE.GridHelper(20, 20, 0x444444, 0x222222)`
   - Y = -2 に配置
 
-- [ ] ライティング設定
+- [x] ライティング設定
   - `AmbientLight(0x404040)` を追加
   - `DirectionalLight(0xffffff, 1.0)` を位置 (5, 10, 7.5) に追加
 
-- [ ] レンダラー設定
+- [x] レンダラー設定
   - `WebGLRenderer({ antialias: true })`
   - ピクセル比を `window.devicePixelRatio` に設定
   - サイズを `window.innerWidth × window.innerHeight` に設定
 
-- [ ] ウィンドウリサイズハンドラ
+- [x] ウィンドウリサイズハンドラ
   - カメラのアスペクト比更新
   - レンダラーサイズ更新
   - `camera.updateProjectionMatrix()` 呼び出し
 
 ### 3.4 カメラコントローラモジュール (`cameraController.js`)
-- [ ] PerspectiveCamera 初期化
+- [x] PerspectiveCamera 初期化
   - FOV: 50, Aspect: 自動計算, Near: 0.1, Far: 1000
   - デフォルト位置: (0, 0, 60)
   - LookAt: (0, 0, 0)
 
-- [ ] 座標変換関数
+- [x] 座標変換関数
   - MediaPipe 正規化座標 [0, 1] → Three.js オフセット座標
   - Y 軸反転処理
   - スケール係数の適用（デフォルト: 2.0）
 
-- [ ] `setViewOffset()` 適用関数
+- [x] `setViewOffset()` 適用関数
   ```javascript
   camera.setViewOffset(
     window.innerWidth,
@@ -134,7 +134,7 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
   );
   ```
 
-- [ ] デフォルト視点への復帰関数
+- [x] デフォルト視点への復帰関数
   - 2秒間顔未検出時にトリガー
   - スムーズにオフセットを (0, 0) に戻す
 
