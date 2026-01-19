@@ -8,16 +8,16 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
 ## Phase 1: プロジェクト基盤整備
 
 ### 1.1 設定ファイルの更新
-- [ ] `vite.config.js` に GitHub Pages 用の base URL 設定を追加
+- [x] `vite.config.js` に GitHub Pages 用の base URL 設定を追加
   - `base: '/off_axis_projection_demo/'` を設定
-- [ ] `package.json` のスクリプトを確認
+- [x] `package.json` のスクリプトを確認
   - `dev`, `build`, `preview` が正しく動作するか確認
 
 ### 1.2 既存ボイラープレートコードの削除
-- [ ] `src/counter.js` を削除（不要なデモコード）
-- [ ] `src/javascript.svg` を削除（不要なアセット）
-- [ ] `src/style.css` を整理（必要な基本スタイルのみ残す）
-- [ ] `src/main.js` のボイラープレートコードをクリア
+- [x] `src/counter.js` を削除（不要なデモコード）
+- [x] `src/javascript.svg` を削除（不要なアセット）
+- [x] `src/style.css` を整理（必要な基本スタイルのみ残す）
+- [x] `src/main.js` のボイラープレートコードをクリア
 
 ---
 
