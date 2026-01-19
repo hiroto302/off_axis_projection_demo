@@ -299,11 +299,11 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
 ## Phase 9: ドキュメント整備
 
 ### 9.1 README.md 作成
-- [ ] プロジェクト概要
-- [ ] デモ URL
-- [ ] ローカル開発手順
-- [ ] 使用技術
-- [ ] ライセンス情報
+- [x] プロジェクト概要
+- [x] デモ URL
+- [x] ローカル開発手順
+- [x] 使用技術
+- [x] ライセンス情報
 
 ### 9.2 CHANGELOG.md 作成（オプション）
 - [ ] 初回リリース（v1.0.0）の記録
