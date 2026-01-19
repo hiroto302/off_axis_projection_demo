@@ -38,3 +38,6 @@ lerna-debug.log*
 # OS関連
 .DS_Store
 Thumbs.db
+
+# 参考用要素
+/Ref/

@@ -7,8 +7,8 @@ import * as THREE from 'three';
 export class CameraController {
   constructor() {
     this.camera = null;
-    this.defaultPosition = new THREE.Vector3(0, 0, 10);
-    this.viewingDistance = 10; // cm
+    this.defaultPosition = new THREE.Vector3(0, 0, 60);
+    this.viewingDistance = 60; // cm
     this.screenWidth = 33.8; // cm (15.4 inch, 16:9)
     this.screenHeight = 19.0; // cm
     this.scale = 2.0;
@@ -41,40 +41,46 @@ export class CameraController {
   }
 
   /**
-   * Convert MediaPipe normalized coordinates to Three.js offset
-   * @param {number} faceX - Normalized X coordinate [0, 1]
-   * @param {number} faceY - Normalized Y coordinate [0, 1]
-   * @returns {Object} Offset coordinates {x, y}
+   * Update camera with off-axis projection based on eye position
+   * @param {number} eyeX - Eye X position in cm (relative to screen center)
+   * @param {number} eyeY - Eye Y position in cm (relative to screen center)
+   * @param {number} eyeZ - Eye Z distance from screen in cm (default: this.viewingDistance)
    */
-  convertToOffset(faceX, faceY) {
-    // Convert [0, 1] to [-1, 1] with center at 0
-    const normalizedX = (faceX - 0.5) * 2;
-    const normalizedY = (faceY - 0.5) * 2;
+  updateProjection(eyeX, eyeY, eyeZ = this.viewingDistance) {
+    // Physical screen dimensions
+    const halfWidth = this.screenWidth / 2;
+    const halfHeight = this.screenHeight / 2;
 
-    // Convert to physical offset (considering screen size and scale)
-    const offsetX = normalizedX * (this.screenWidth / 2) * this.scale;
-    const offsetY = -normalizedY * (this.screenHeight / 2) * this.scale; // Y-axis inversion
+    // Screen bounds (screen plane at Z=0)
+    const left = -halfWidth;
+    const right = halfWidth;
+    const bottom = -halfHeight;
+    const top = halfHeight;
 
-    return { x: offsetX, y: offsetY };
-  }
+    // Near and far clipping planes
+    const near = 0.1;
+    const far = 1000;
 
-  /**
-   * Apply view offset to camera
-   * @param {number} smoothedX - Smoothed X offset
-   * @param {number} smoothedY - Smoothed Y offset
-   */
-  applyViewOffset(smoothedX, smoothedY) {
-    this.offsetX = smoothedX;
-    this.offsetY = smoothedY;
+    // Calculate frustum based on eye position
+    // This creates the "looking through a window" effect
+    const frustumLeft = (left - eyeX) * near / eyeZ;
+    const frustumRight = (right - eyeX) * near / eyeZ;
+    const frustumBottom = (bottom - eyeY) * near / eyeZ;
+    const frustumTop = (top - eyeY) * near / eyeZ;
 
-    this.camera.setViewOffset(
-      window.innerWidth,
-      window.innerHeight,
-      smoothedX,
-      smoothedY,
-      window.innerWidth,
-      window.innerHeight
+    // Update projection matrix directly
+    this.camera.projectionMatrix.makePerspective(
+      frustumLeft, frustumRight,
+      frustumTop, frustumBottom,
+      near, far
     );
+
+    // Update inverse projection matrix
+    this.camera.projectionMatrixInverse.copy(this.camera.projectionMatrix).invert();
+
+    // Position camera at eye position
+    this.camera.position.set(eyeX, eyeY, eyeZ);
+    this.camera.lookAt(eyeX, eyeY, 0); // Look at point on screen plane
 
     this.noFaceTimer = 0;
     this.isReturningToDefault = false;
@@ -98,29 +104,24 @@ export class CameraController {
   returnToDefaultView() {
     this.isReturningToDefault = true;
 
-    // Smoothly animate offset back to (0, 0)
+    // Target: center position (0, 0, viewingDistance)
+    let currentX = this.camera.position.x;
+    let currentY = this.camera.position.y;
+
     const animateReturn = () => {
       const damping = 0.1;
-      this.offsetX *= (1 - damping);
-      this.offsetY *= (1 - damping);
+      currentX *= (1 - damping);
+      currentY *= (1 - damping);
 
-      this.camera.setViewOffset(
-        window.innerWidth,
-        window.innerHeight,
-        this.offsetX,
-        this.offsetY,
-        window.innerWidth,
-        window.innerHeight
-      );
+      // Update projection with damped position
+      this.updateProjection(currentX, currentY, this.viewingDistance);
 
-      // Continue animation if offsets are still significant
-      if (Math.abs(this.offsetX) > 0.1 || Math.abs(this.offsetY) > 0.1) {
+      // Continue animation if still moving
+      if (Math.abs(currentX) > 0.1 || Math.abs(currentY) > 0.1) {
         requestAnimationFrame(animateReturn);
       } else {
-        // Clear view offset completely
-        this.camera.clearViewOffset();
-        this.offsetX = 0;
-        this.offsetY = 0;
+        // Fully reset to center
+        this.updateProjection(0, 0, this.viewingDistance);
         this.isReturningToDefault = false;
       }
     };

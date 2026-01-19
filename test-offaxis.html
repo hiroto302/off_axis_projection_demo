@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Off-Axis Projection Test</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #1a1a2e;
+      font-family: system-ui, sans-serif;
+    }
+    #app {
+      width: 100vw;
+      height: 100vh;
+    }
+    #controls {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      z-index: 100;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      background: #00ff88;
+      border: none;
+      border-radius: 4px;
+      color: black;
+      font-weight: bold;
+    }
+    #info {
+      margin-top: 15px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="controls">
+    <h3>Off-Axis Projection Test</h3>
+    <button id="center">Center (0, 0)</button>
+    <button id="left">Left (-10cm, 0)</button>
+    <button id="right">Right (10cm, 0)</button>
+    <button id="up">Up (0, 10cm)</button>
+    <button id="down">Down (0, -10cm)</button>
+    <div id="info">
+      Position: <span id="position">0, 0, 60</span>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { CameraController } from './src/modules/cameraController.js';
+    import { ThreeSceneManager } from './src/modules/threeScene.js';
+
+    // Initialize scene
+    const app = document.getElementById('app');
+    const sceneManager = new ThreeSceneManager(app);
+    const cameraController = new CameraController();
+
+    sceneManager.setCamera(cameraController.getCamera());
+
+    // Set initial projection
+    cameraController.updateProjection(0, 0, 60);
+
+    // Update position display
+    const updatePosition = (x, y, z) => {
+      document.getElementById('position').textContent = `${x}, ${y}, ${z}`;
+    };
+
+    // Button handlers
+    document.getElementById('center').addEventListener('click', () => {
+      cameraController.updateProjection(0, 0, 60);
+      updatePosition(0, 0, 60);
+    });
+
+    document.getElementById('left').addEventListener('click', () => {
+      cameraController.updateProjection(-10, 0, 60);
+      updatePosition(-10, 0, 60);
+    });
+
+    document.getElementById('right').addEventListener('click', () => {
+      cameraController.updateProjection(10, 0, 60);
+      updatePosition(10, 0, 60);
+    });
+
+    document.getElementById('up').addEventListener('click', () => {
+      cameraController.updateProjection(0, 10, 60);
+      updatePosition(0, 10, 60);
+    });
+
+    document.getElementById('down').addEventListener('click', () => {
+      cameraController.updateProjection(0, -10, 60);
+      updatePosition(0, -10, 60);
+    });
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      sceneManager.render();
+    }
+    animate();
+
+    // Make globally accessible
+    window.testApp = {
+      sceneManager,
+      cameraController
+    };
+
+    console.log('Test app initialized. Click buttons to test off-axis projection.');
+  </script>
+</body>
+</html>

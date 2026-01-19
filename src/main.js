@@ -31,6 +31,9 @@ class OffAxisProjectionApp {
 
     // Smoothing parameters
     this.smoothingAlpha = 0.1
+
+    // Scale for head movement amplification
+    this.scale = 2.0
   }
 
   /**
@@ -170,17 +173,30 @@ class OffAxisProjectionApp {
         this.noFaceTimer = 0
         this.cameraController.resetNoFaceTimer()
 
-        // Convert MediaPipe coordinates to offset
-        const offset = this.cameraController.convertToOffset(detection.x, detection.y)
+        // Convert MediaPipe normalized coords [0,1] to physical eye position in cm
+        // MediaPipe: (0.5, 0.5) = center of camera view
+        // Assuming user is roughly centered when face is at (0.5, 0.5)
+        // and moves within reasonable range (±20cm X, ±15cm Y)
+        const maxOffsetX = 20 // cm
+        const maxOffsetY = 15 // cm
 
-        // Apply smoothing
+        // Convert [0,1] to [-1,1] centered coords
+        const normalizedX = (detection.x - 0.5) * 2
+        const normalizedY = (detection.y - 0.5) * 2
+
+        // Convert to physical eye position (cm)
+        // Invert X for mirror effect (moving right → see left side of object)
+        const eyeX = -normalizedX * maxOffsetX * this.scale
+        const eyeY = -normalizedY * maxOffsetY * this.scale // Also invert Y
+
+        // Apply smoothing to eye position
         const smoothed = this.smoother.update(
-          { x: offset.x, y: offset.y, z: 0 },
+          { x: eyeX, y: eyeY, z: this.cameraController.viewingDistance },
           { x: this.smoothingAlpha, y: this.smoothingAlpha, z: 0.15 }
         )
 
-        // Apply offset to camera
-        this.cameraController.applyViewOffset(smoothed.x, smoothed.y)
+        // Update camera projection with eye position
+        this.cameraController.updateProjection(smoothed.x, smoothed.y, smoothed.z)
       } else {
         // No face detected - start timer
         if (this.noFaceTimer === 0) {

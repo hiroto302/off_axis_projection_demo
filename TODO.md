@@ -115,28 +115,25 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
 - [x] PerspectiveCamera 初期化
   - FOV: 50, Aspect: 自動計算, Near: 0.1, Far: 1000
   - デフォルト位置: (0, 0, 60)
+  - 視聴距離: 60cm（物理的な想定距離）
   - LookAt: (0, 0, 0)
 
-- [x] 座標変換関数
-  - MediaPipe 正規化座標 [0, 1] → Three.js オフセット座標
-  - Y 軸反転処理
-  - スケール係数の適用（デフォルト: 2.0）
+- [x] **Off-Axis Projection実装（カスタムfrustum計算）**
+  - ~~`setViewOffset()`は使用しない~~（マルチモニター用であり、off-axis projectionには不適切）
+  - `updateProjection(eyeX, eyeY, eyeZ)`メソッドを実装
+  - 視点位置に基づいてカスタムfrustumを計算
+  - `camera.projectionMatrix.makePerspective()`で直接プロジェクション行列を設定
+  - カメラ位置を視点位置に移動し、スクリーン平面（Z=0）を見るように設定
 
-- [x] `setViewOffset()` 適用関数
-  ```javascript
-  camera.setViewOffset(
-    window.innerWidth,
-    window.innerHeight,
-    smoothedX,
-    smoothedY,
-    window.innerWidth,
-    window.innerHeight
-  );
-  ```
+- [x] 座標変換関数
+  - MediaPipe正規化座標 `[0, 1]` → 物理的な視点位置（cm単位）
+  - X軸・Y軸の反転処理（ミラーリング効果）
+  - スケール係数の適用（デフォルト: 2.0）
 
 - [x] デフォルト視点への復帰関数
   - 2秒間顔未検出時にトリガー
-  - スムーズにオフセットを (0, 0) に戻す
+  - スムーズに中央位置 (0, 0, 60) に戻る
+  - `updateProjection()` を使用してアニメーション
 
 ---
 
