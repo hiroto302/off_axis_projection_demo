@@ -24,28 +24,28 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
 ## Phase 2: モジュール構造の構築
 
 ### 2.1 ディレクトリ作成
-- [ ] `src/modules/` ディレクトリを作成
+- [x] `src/modules/` ディレクトリを作成
 
 ### 2.2 基本モジュールファイルの作成
-- [ ] `src/modules/smoothing.js` を作成
+- [x] `src/modules/smoothing.js` を作成
   - EMA (Exponential Moving Average) スムージングクラスを実装
   - `update(newValue, alpha)` メソッド
   - X, Y, Z 軸それぞれの平滑化値を管理
 
-- [ ] `src/modules/faceDetector.js` を作成
+- [x] `src/modules/faceDetector.js` を作成
   - MediaPipe Face Detection の初期化
   - VIDEO モードでの設定
   - 顔検出結果の取得メソッド
   - エラーハンドリング（モデル読み込み失敗時）
 
-- [ ] `src/modules/threeScene.js` を作成
+- [x] `src/modules/threeScene.js` を作成
   - Three.js シーンのセットアップ
   - GridHelper の作成（サイズ20、分割20）
   - ライティング設定（Ambient + Directional）
   - レンダラーの初期化
   - ウィンドウリサイズ対応
 
-- [ ] `src/modules/cameraController.js` を作成
+- [x] `src/modules/cameraController.js` を作成
   - PerspectiveCamera の初期化（FOV 50）
   - 顔位置からカメラオフセットへの変換ロジック
   - `setViewOffset()` の計算と適用
