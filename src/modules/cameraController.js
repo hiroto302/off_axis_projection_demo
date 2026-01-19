@@ -7,8 +7,8 @@ import * as THREE from 'three';
 export class CameraController {
   constructor() {
     this.camera = null;
-    this.defaultPosition = new THREE.Vector3(0, 0, 60);
-    this.viewingDistance = 60; // cm
+    this.defaultPosition = new THREE.Vector3(0, 0, 10);
+    this.viewingDistance = 10; // cm
     this.screenWidth = 33.8; // cm (15.4 inch, 16:9)
     this.screenHeight = 19.0; // cm
     this.scale = 2.0;

@@ -143,32 +143,32 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
 ## Phase 4: メインアプリケーションの統合
 
 ### 4.1 HTML 構造の更新 (`index.html`)
-- [ ] 基本HTML構造を整備
+- [x] 基本HTML構造を整備
   - `<div id="app">` をレンダリングコンテナに
   - `<video id="webcam">` 要素を追加（hidden）
   - ローディングメッセージ用 `<div id="loading">`
   - 顔未検出警告用 `<div id="no-face-warning">`
 
 ### 4.2 CSS スタイルの実装 (`style.css`)
-- [ ] 基本レイアウトスタイル
+- [x] 基本レイアウトスタイル
   - `body, html` を margin: 0, overflow: hidden に
   - `#app` を全画面表示に
 
-- [ ] ローディング画面スタイル
+- [x] ローディング画面スタイル
   - 中央配置、半透明背景
   - 「MediaPipeモデル読み込み中...」テキスト
 
-- [ ] 顔未検出警告スタイル
+- [x] 顔未検出警告スタイル
   - 画面上部、薄い警告色
   - 「カメラに顔を向けてください」テキスト
   - デフォルトは非表示（`.hidden` クラス）
 
-- [ ] ビデオ要素スタイル
+- [x] ビデオ要素スタイル
   - デフォルト: `display: none`
   - デバッグモード時に右下に小さく表示
 
 ### 4.3 メインアプリケーション (`main.js`)
-- [ ] 初期化フロー実装
+- [x] 初期化フロー実装
   1. ローディング画面表示
   2. MediaPipe Face Detector 初期化
   3. カメラアクセス取得（640×480、30fps）
@@ -176,7 +176,7 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
   5. ローディング画面非表示
   6. アニメーションループ開始
 
-- [ ] カメラアクセス関数
+- [x] カメラアクセス関数
   ```javascript
   navigator.mediaDevices.getUserMedia({
     video: {
@@ -188,19 +188,19 @@ MediaPipe Face Detection と Three.js を使用した off-axis projection デモ
   })
   ```
 
-- [ ] エラーハンドリング
+- [x] エラーハンドリング
   - カメラアクセス拒否時: メッセージ表示
   - MediaPipe 初期化失敗時: メッセージ表示
   - WebGL 非対応時: メッセージ表示
 
-- [ ] アニメーションループ実装
+- [x] アニメーションループ実装
   - `requestAnimationFrame` でループ
   - フレームカウンタで2フレームに1回顔検出
   - 顔検出結果をスムージング
   - カメラオフセット更新
   - シーンレンダリング
 
-- [ ] 顔未検出タイマー
+- [x] 顔未検出タイマー
   - 顔が2秒間検出されない場合、デフォルト視点に復帰
   - 警告メッセージ表示/非表示の切り替え
 
