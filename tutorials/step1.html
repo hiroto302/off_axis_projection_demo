@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 1: Three.js基本シーン</title>
+  <link rel="stylesheet" href="./assets/base.css">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p id="loading-text">初期化中...</p>
+  </div>
+
+  <!-- Video Element (Phase 2以降で使用) -->
+  <video id="video" autoplay playsinline></video>
+
+  <!-- Canvas for video overlay (Phase 3以降で使用) -->
+  <canvas id="overlay-canvas"></canvas>
+
+  <!-- Warning Banner (Phase 3以降で使用) -->
+  <div id="warning-banner">
+    ⚠️ カメラに顔を向けてください
+  </div>
+
+  <!-- Main 3D Canvas (Three.js) -->
+  <canvas id="three-canvas"></canvas>
+
+  <!-- Info Panel -->
+  <div id="info-panel">
+    <h3>Phase: <span id="phase-name">1</span></h3>
+    <p id="phase-description">Three.js基本シーン</p>
+    <div id="debug-info"></div>
+  </div>
+
+  <!-- Import Three.js from CDN -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <!-- Shared utility functions -->
+  <script src="./assets/utils.js"></script>
+
+  <!-- Phase 1 tutorial script -->
+  <script type="module" src="./step1-basic-scene.js"></script>
+</body>
+</html>

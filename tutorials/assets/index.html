@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Off-Axis Projection Tutorial</title>
+  <link rel="stylesheet" href="./assets/base.css">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p id="loading-text">初期化中...</p>
+  </div>
+
+  <!-- Video Element (hidden by default) -->
+  <video id="video" autoplay playsinline></video>
+
+  <!-- Canvas for video overlay (drawing landmarks, bounding boxes) -->
+  <canvas id="overlay-canvas"></canvas>
+
+  <!-- Warning Banner (shown when face not detected) -->
+  <div id="warning-banner">
+    ⚠️ カメラに顔を向けてください
+  </div>
+
+  <!-- Main 3D Canvas (Three.js) -->
+  <canvas id="three-canvas"></canvas>
+
+  <!-- Info Panel -->
+  <div id="info-panel">
+    <h3>Phase: <span id="phase-name">1</span></h3>
+    <p id="phase-description">Three.js基本シーン</p>
+    <div id="debug-info"></div>
+  </div>
+
+  <!-- Import Three.js from CDN -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <!-- Import lil-gui (for debug UI phases) -->
+  <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.19"></script>
+
+  <!-- Import Stats.js (for performance monitoring) -->
+  <script src="https://cdn.jsdelivr.net/npm/stats.js@0.17.0/build/stats.min.js"></script>
+
+  <!-- Shared utility functions -->
+  <script src="./assets/utils.js"></script>
+
+  <!-- Main tutorial script (this will be replaced per phase) -->
+  <!-- Example: <script type="module" src="../step1-basic-scene.js"></script> -->
+</body>
+</html>

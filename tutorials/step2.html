@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 2: Webカメラアクセス</title>
+  <link rel="stylesheet" href="./assets/base.css">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p id="loading-text">初期化中...</p>
+  </div>
+
+  <!-- Video Element -->
+  <video id="video" autoplay playsinline></video>
+
+  <!-- Canvas for video overlay (Phase 3以降で使用) -->
+  <canvas id="overlay-canvas"></canvas>
+
+  <!-- Warning Banner (Phase 3以降で使用) -->
+  <div id="warning-banner">
+    ⚠️ カメラに顔を向けてください
+  </div>
+
+  <!-- Main 3D Canvas (Three.js) -->
+  <canvas id="three-canvas"></canvas>
+
+  <!-- Info Panel -->
+  <div id="info-panel">
+    <h3>Phase: <span id="phase-name">2</span></h3>
+    <p id="phase-description">Webカメラアクセス</p>
+    <div id="debug-info"></div>
+  </div>
+
+  <!-- Import Three.js from CDN -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <!-- Shared utility functions -->
+  <script src="./assets/utils.js"></script>
+
+  <!-- Phase 2 tutorial script -->
+  <script type="module" src="./step2-camera-access.js"></script>
+</body>
+</html>
