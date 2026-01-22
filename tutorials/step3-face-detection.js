@@ -326,14 +326,15 @@ function drawDetections(detections) {
   // 複数顔検出時は最初の顔のみ使用
   const detection = detections.detections[0];
 
-  // バウンディングボックスの座標を取得(正規化座標 [0, 1])
+  // バウンディングボックスの座標を取得
+  // MediaPipe Tasks Vision APIのboundingBoxは既にピクセル座標
   const bbox = detection.boundingBox;
 
-  // 正規化座標をピクセル座標に変換
-  const x = bbox.originX * canvasElement.width;
-  const y = bbox.originY * canvasElement.height;
-  const width = bbox.width * canvasElement.width;
-  const height = bbox.height * canvasElement.height;
+  // そのまま使用（既にピクセル座標）
+  const x = bbox.originX;
+  const y = bbox.originY;
+  const width = bbox.width;
+  const height = bbox.height;
 
   // 顔の中心座標を計算
   const centerX = x + width / 2;
@@ -362,10 +363,11 @@ function drawDetections(detections) {
   canvasCtx.fillText(`${confidence}%`, x, y - 5);
 
   // 正規化座標を表示(デバッグ用)
+  // ピクセル座標から正規化座標 [0, 1] に変換
   canvasCtx.fillStyle = '#ffff00'; // 黄色
   canvasCtx.font = '12px monospace';
-  const normalizedX = ((centerX / canvasElement.width) - 0.5) * 2;
-  const normalizedY = ((centerY / canvasElement.height) - 0.5) * 2;
+  const normalizedX = centerX / canvasElement.width;
+  const normalizedY = centerY / canvasElement.height;
   canvasCtx.fillText(
     `Norm: (${normalizedX.toFixed(3)}, ${normalizedY.toFixed(3)})`,
     x,
