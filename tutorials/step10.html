@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 10: パフォーマンス最適化 - Stats.js & Optimization</title>
+  <link rel="stylesheet" href="./assets/base.css">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p id="loading-text">初期化中...</p>
+  </div>
+
+  <!-- Video Element -->
+  <video id="video" autoplay playsinline></video>
+
+  <!-- Canvas for video overlay (顔検出結果を描画) -->
+  <canvas id="overlay-canvas"></canvas>
+
+  <!-- Warning Banner (顔未検出時に表示) -->
+  <div id="warning-banner">
+    ⚠️ カメラに顔を向けてください
+  </div>
+
+  <!-- Main 3D Canvas (Three.js) -->
+  <canvas id="three-canvas"></canvas>
+
+  <!-- Info Panel -->
+  <div id="info-panel">
+    <h3>Phase: <span id="phase-name">10</span></h3>
+    <p id="phase-description">パフォーマンス最適化: Stats.js & Optimization</p>
+    <div id="debug-info"></div>
+  </div>
+
+  <!-- Import Three.js from CDN -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/",
+        "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs"
+      }
+    }
+  </script>
+
+  <!-- Shared utility functions -->
+  <script src="./assets/utils.js"></script>
+
+  <!-- Phase 10 tutorial script -->
+  <script type="module" src="./step10-optimization.js"></script>
+</body>
+</html>
