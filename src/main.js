@@ -34,19 +34,19 @@ class OffAxisProjectionApp {
     this.smoothingAlpha = 0.1
 
     // Scale for head movement amplification
-    this.scale = 2.0
+    this.scale = 1.0
 
     // GUI parameters
     this.guiParams = {
       smoothing: 0.1,
-      scale: 2.0,
-      viewingDistance: 60,
-      screenWidth: 33.8,
+      scale: 1.0,
+      viewingDistance: 10,
+      screenWidth: 16.59,
       showVideo: false,
       showStats: false,
       manualControl: false,
       cameraX: 0,
-      cameraY: 0
+      cameraY: 2
     }
 
     // GUI instance
@@ -169,7 +169,7 @@ class OffAxisProjectionApp {
         })
 
       paramsFolder
-        .add(this.guiParams, 'viewingDistance', 30, 100, 1)
+        .add(this.guiParams, 'viewingDistance', 5, 30, 0.5)
         .name('Viewing Distance (cm)')
         .onChange((value) => {
           if (this.cameraController) {
@@ -178,7 +178,7 @@ class OffAxisProjectionApp {
         })
 
       paramsFolder
-        .add(this.guiParams, 'screenWidth', 20, 50, 0.1)
+        .add(this.guiParams, 'screenWidth', 10, 40, 0.1)
         .name('Screen Width (cm)')
         .onChange((value) => {
           if (this.cameraController) {
@@ -226,7 +226,7 @@ class OffAxisProjectionApp {
           if (value) {
             // Reset camera position when entering manual mode
             this.guiParams.cameraX = 0
-            this.guiParams.cameraY = 0
+            this.guiParams.cameraY = 2
           }
         })
 
@@ -263,6 +263,12 @@ class OffAxisProjectionApp {
     this.lastTime = currentTime
 
     this.frameCount++
+
+    // Rotate cube
+    if (this.sceneManager && this.sceneManager.objects && this.sceneManager.objects.cube) {
+      this.sceneManager.objects.cube.rotation.y += 0.01
+      this.sceneManager.objects.cube.rotation.x += 0.01 * 0.5
+    }
 
     // Run face detection every 2 frames (30fps instead of 60fps)
     if (this.frameCount % 2 === 0) {
@@ -328,7 +334,7 @@ class OffAxisProjectionApp {
         // Convert to physical eye position (cm)
         // Invert X for mirror effect (moving right → see left side of object)
         const eyeX = -normalizedX * maxOffsetX * this.scale
-        const eyeY = -normalizedY * maxOffsetY * this.scale // Also invert Y
+        const eyeY = -normalizedY * maxOffsetY * this.scale + this.cameraController.cameraY // Add cameraY offset
 
         // Apply smoothing to eye position
         const smoothed = this.smoother.update(

@@ -18,15 +18,20 @@ export class ThreeSceneManager {
   /**
    * Initialize the Three.js scene
    */
+  /**
+   * Initialize the Three.js scene
+   */
   initialize() {
     // Create scene
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x1a1a2e);
+    this.scene.background = new THREE.Color(0x0a0a1e);
 
     // Create grid helper
-    this.grid = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
+    this.grid = new THREE.GridHelper(20, 20, 0xff8844, 0xdd6633);
     this.grid.position.y = -2;
     this.scene.add(this.grid);
+
+    console.log('✅ Grid added');
 
     // Add 3D objects for off-axis projection demonstration
     this.create3DObjects();
@@ -46,11 +51,14 @@ export class ThreeSceneManager {
   /**
    * Create 3D objects to demonstrate off-axis projection
    */
+  /**
+   * Create 3D objects to demonstrate off-axis projection
+   */
   create3DObjects() {
-    // Central cube
+    // Central cube with wireframe
     const cubeGeometry = new THREE.BoxGeometry(2, 2, 2);
     const cubeMaterial = new THREE.MeshStandardMaterial({
-      color: 0x00ff88,
+      color: 0x4488ff,
       metalness: 0.3,
       roughness: 0.4
     });
@@ -59,73 +67,20 @@ export class ThreeSceneManager {
     this.scene.add(cube);
 
     // Add wireframe edges to the cube
-    const edges = new THREE.EdgesGeometry(cubeGeometry);
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
-    const wireframe = new THREE.LineSegments(edges, lineMaterial);
+    const wireframeGeometry = new THREE.EdgesGeometry(cubeGeometry);
+    const wireframeMaterial = new THREE.LineBasicMaterial({
+      color: 0xffffff,
+      linewidth: 2
+    });
+    const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
     cube.add(wireframe);
-
-    // Sphere on the left
-    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
-    const sphereMaterial = new THREE.MeshStandardMaterial({
-      color: 0xff6b6b,
-      metalness: 0.5,
-      roughness: 0.2
-    });
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    sphere.position.set(-4, 0, -2);
-    this.scene.add(sphere);
-
-    // Torus on the right
-    const torusGeometry = new THREE.TorusGeometry(1, 0.4, 16, 100);
-    const torusMaterial = new THREE.MeshStandardMaterial({
-      color: 0x4ecdc4,
-      metalness: 0.4,
-      roughness: 0.3
-    });
-    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
-    torus.position.set(4, 0, -2);
-    torus.rotation.x = Math.PI / 4;
-    this.scene.add(torus);
-
-    // Cone in the back
-    const coneGeometry = new THREE.ConeGeometry(1, 2, 32);
-    const coneMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffe66d,
-      metalness: 0.3,
-      roughness: 0.5
-    });
-    const cone = new THREE.Mesh(coneGeometry, coneMaterial);
-    cone.position.set(0, 0, -5);
-    this.scene.add(cone);
-
-    // Small cubes forming a pattern
-    const smallCubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-    const positions = [
-      [-2, -1, 2],
-      [2, -1, 2],
-      [-2, -1, -2],
-      [2, -1, -2]
-    ];
-
-    positions.forEach((pos, index) => {
-      const color = [0xff6b6b, 0x4ecdc4, 0xffe66d, 0x00ff88][index];
-      const smallCubeMaterial = new THREE.MeshStandardMaterial({
-        color,
-        metalness: 0.4,
-        roughness: 0.4
-      });
-      const smallCube = new THREE.Mesh(smallCubeGeometry, smallCubeMaterial);
-      smallCube.position.set(...pos);
-      this.scene.add(smallCube);
-    });
 
     // Store references for potential animation
     this.objects = {
-      cube,
-      sphere,
-      torus,
-      cone
+      cube
     };
+
+    console.log('✅ Cube added');
   }
 
   /**

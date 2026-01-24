@@ -7,11 +7,12 @@ import * as THREE from 'three';
 export class CameraController {
   constructor() {
     this.camera = null;
-    this.defaultPosition = new THREE.Vector3(0, 0, 60);
-    this.viewingDistance = 60; // cm
-    this.screenWidth = 33.8; // cm (15.4 inch, 16:9)
-    this.screenHeight = 19.0; // cm
-    this.scale = 2.0;
+    this.defaultPosition = new THREE.Vector3(0, 2, 10);
+    this.viewingDistance = 10; // cm (changed from 60cm)
+    this.screenWidth = 16.59; // cm (FOV=50° equivalent)
+    this.screenHeight = 9.33; // cm (FOV=50° equivalent)
+    this.cameraY = 2; // cm (camera Y offset)
+    this.scale = 1.0; // coordinate scale (sensitivity adjustment)
 
     this.offsetX = 0;
     this.offsetY = 0;
@@ -101,27 +102,30 @@ export class CameraController {
   /**
    * Smoothly return to default view
    */
+  /**
+   * Smoothly return to default view
+   */
   returnToDefaultView() {
     this.isReturningToDefault = true;
 
-    // Target: center position (0, 0, viewingDistance)
+    // Target: center position (0, cameraY, viewingDistance)
     let currentX = this.camera.position.x;
     let currentY = this.camera.position.y;
 
     const animateReturn = () => {
-      const damping = 0.1;
+      const damping = 0.05; // slower return animation
       currentX *= (1 - damping);
-      currentY *= (1 - damping);
+      currentY = currentY * (1 - damping) + this.cameraY * damping;
 
       // Update projection with damped position
       this.updateProjection(currentX, currentY, this.viewingDistance);
 
       // Continue animation if still moving
-      if (Math.abs(currentX) > 0.1 || Math.abs(currentY) > 0.1) {
+      if (Math.abs(currentX) > 0.1 || Math.abs(currentY - this.cameraY) > 0.1) {
         requestAnimationFrame(animateReturn);
       } else {
-        // Fully reset to center
-        this.updateProjection(0, 0, this.viewingDistance);
+        // Fully reset to default position
+        this.updateProjection(0, this.cameraY, this.viewingDistance);
         this.isReturningToDefault = false;
       }
     };
