@@ -8,7 +8,7 @@ export default {
   server:
   {
     host: true, // Open to local network and display URL
-    open: '/src/' // メインアプリを開く
+    open: '/src/index.html' // Campfireバージョンを開く
   },
   build:
   {
@@ -17,7 +17,8 @@ export default {
     sourcemap: true,    // Add sourcemap
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'src/index.html'),
+        main: resolve(__dirname, 'src/index.html'), // 元のCubeバージョンをmain
+        skybox: resolve(__dirname, 'src/index-campfire.html'),
         tutorials: resolve(__dirname, 'tutorials/index.html'),
         step1: resolve(__dirname, 'tutorials/step1.html'),
         step2: resolve(__dirname, 'tutorials/step2.html'),
